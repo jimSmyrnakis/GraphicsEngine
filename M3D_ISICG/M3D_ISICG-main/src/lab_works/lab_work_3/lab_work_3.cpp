@@ -19,7 +19,7 @@ namespace M3D_ISICG
 		glNamedBufferData( ebo, indices.size() * sizeof( int ), indices.data(), GL_STATIC_DRAW );
 
 		glCreateBuffers( 1, &vbo_colors );
-		glNamedBufferData( vbo_colors, colorBuffer.size() * sizeof( Vec4f ), colorBuffer.data(), GL_STATIC_DRAW );
+		glNamedBufferData( vbo_colors, colors.size() * sizeof( Vec4f ), colors.data(), GL_STATIC_DRAW );
 
 		glCreateVertexArrays( 1, &vao );
 		glEnableVertexArrayAttrib( vao, 0 );

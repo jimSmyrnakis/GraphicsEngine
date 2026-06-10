@@ -10,10 +10,10 @@ namespace M3D_ISICG
 
 	LabWork2::~LabWork2()
 	{
-		glDeleteShader( _program );
-		glDeleteShader( vao );
+		glDeleteProgram( _program );
 		glDeleteBuffers(1, &vbo_positions );
 		glDeleteBuffers( 1, &vbo_colors );
+		glDeleteVertexArrays( 1, &vao );
 	}
 
 	bool LabWork2::init()
@@ -23,7 +23,7 @@ namespace M3D_ISICG
 		colorBuffer = { Vec4f( 1, 0, 0, 1 ), Vec4f( 0, 1, 0, 1 ), Vec4f( 0, 0, 1, 1 ), Vec4f( 1, 1, 1, 1 ) };
 		indexBuffer	= { 0, 1, 2, 1 , 2 ,3 };
 
-		std::cout << "Initializing lab work 1..." << std::endl;
+		std::cout << "Initializing lab work 2..." << std::endl;
 		// Set the color used by glClear to clear the color buffer (in render()).
 		glClearColor( _bgColor.x, _bgColor.y, _bgColor.z, _bgColor.w );
 		
@@ -90,6 +90,7 @@ namespace M3D_ISICG
 		std::cout << "Compiling Done!" << std::endl;
 
 		// Mesh data
+#if OPENGL_VERSION_MAJOR == 4 && OPENGL_VERSION_MINOR >= 5
 		glCreateBuffers( 1, &vbo_positions );
 		glNamedBufferData( vbo_positions, mesh.size() * sizeof( Vec2f ), mesh.data(), GL_STATIC_DRAW );
 
@@ -99,10 +100,9 @@ namespace M3D_ISICG
 		glCreateBuffers( 1, &vbo_colors );
 		glNamedBufferData( vbo_colors, colorBuffer.size() * sizeof( Vec4f ), colorBuffer.data(), GL_STATIC_DRAW );
 
-
 		glCreateVertexArrays( 1, &vao );
 		glEnableVertexArrayAttrib( vao, 0 );
-		glVertexArrayAttribFormat( vao, 0, 2, GL_FLOAT, GL_FALSE , 0 );
+		glVertexArrayAttribFormat( vao, 0, 2, GL_FLOAT, GL_FALSE, 0 );
 		glVertexArrayVertexBuffer( vao, 0, vbo_positions, 0, sizeof( Vec2f ) );
 		glVertexArrayAttribBinding( vao, 0, 0 );
 
@@ -112,17 +112,58 @@ namespace M3D_ISICG
 		glVertexArrayAttribBinding( vao, 1, 1 );
 
 		glVertexArrayElementBuffer( vao, ebo );
+#else
+		glGenBuffers( 1, &vbo_positions );
+		glBindBuffer( GL_ARRAY_BUFFER, vbo_positions );
+		glBufferData( GL_ARRAY_BUFFER, mesh.size() * sizeof( Vec2f ), mesh.data(), GL_STATIC_DRAW );
+
+		glGenBuffers( 1, &vbo_colors );
+		glBindBuffer( GL_ARRAY_BUFFER, vbo_colors );
+		glBufferData( GL_ARRAY_BUFFER, colorBuffer.size() * sizeof( Vec4f ), colorBuffer.data(), GL_STATIC_DRAW );
+
+		glGenVertexArrays( 1, &vao );
+		glBindVertexArray( vao );
+
+		glGenBuffers( 1, &ebo );
+		glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ebo );
+		glBufferData( GL_ELEMENT_ARRAY_BUFFER, indexBuffer.size() * sizeof( int ), indexBuffer.data(), GL_STATIC_DRAW );
+		
+		glEnableVertexAttribArray( 0 );
+		glBindBuffer( GL_ARRAY_BUFFER, vbo_positions );
+		glVertexAttribPointer( 0, // attribute index
+							   2, // vec2 = x, y
+							   GL_FLOAT,
+							   GL_FALSE,
+							   sizeof( Vec2f ), // stride
+							   (void *)0		// offset
+		);
+
+		
+		
+		glEnableVertexAttribArray( 1 );
+		glBindBuffer( GL_ARRAY_BUFFER, vbo_colors );
+		glVertexAttribPointer( 1, // attribute index
+							   4, // vec4 = rgba
+							   GL_FLOAT,
+							   GL_FALSE,
+							   sizeof( Vec4f ), // stride
+							   (void *)0		// offset
+		);
+
+#endif
+		
 
 		uTranslationX_location = glGetUniformLocation( _program, "uTranslationX" );
 		u_brightness_location  = glGetUniformLocation( _program, "u_brightness" );
-		
-		
+		glProgramUniform1f( _program, u_brightness_location, _Brightness );
+		glProgramUniform1f( _program, uTranslationX_location, uTranslationX_variable );
+
 		return true;
 	}
 
 	void LabWork2::animate( const float p_deltaTime ) { 
 		_time += p_deltaTime;
-		uTranslationX_variable = glm::sin( _time ) / 2.0f;
+		uTranslationX_variable = glm::sin( _speed * _time ) / 2.0f;
 	}
 
 	void LabWork2::render()
@@ -131,7 +172,7 @@ namespace M3D_ISICG
 		 glClear( GL_COLOR_BUFFER_BIT );
 		
 		 glBindVertexArray( vao );
-		glProgramUniform1f( _program, uTranslationX_location, uTranslationX_variable );
+		 glProgramUniform1f( _program, uTranslationX_location, uTranslationX_variable );
 		 glUseProgram( _program );
 		 glDrawElements( GL_TRIANGLES, indexBuffer.size(), GL_UNSIGNED_INT, nullptr );
 		 glBindVertexArray( 0 );
@@ -143,19 +184,27 @@ namespace M3D_ISICG
 
 	void LabWork2::displayUI()
 	{
-		ImGui::Begin( "Settings lab work 1" );
+		ImGui::Begin( "Settings lab work 2" );
 		ImGui::Text( "No setting available!" );
-		ImGui::End();
+		
 
 		bool Update_var =  ImGui::SliderFloat( "Brighness", &_Brightness, 0, 1, nullptr, 0 );
 		if (Update_var) {
 			glProgramUniform1f( _program, u_brightness_location, _Brightness );
 		}
-		float color[ 3 ];
+
 		Update_var = ImGui::ColorEdit3( "BackGround", glm::value_ptr( _bgColor ), 0 );
 		if (Update_var) {
 			glClearColor( _bgColor.r, _bgColor.g, _bgColor.b, 1 );
 		}
+
+		Update_var = ImGui::SliderFloat( "Speed", &_speed, 0, 5, nullptr, 0 );
+		if ( Update_var )
+		{
+			
+		}
+
+		ImGui::End();
 	}
 
 } // namespace M3D_ISICG

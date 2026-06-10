@@ -7,8 +7,8 @@ namespace M3D_ISICG
 {
 	LabWorkManager::LabWorkManager()
 	{
-		_current = new LabWork1();
-		_type	 = TYPE::LAB_WORK_1;
+		_current = new LabWork3();
+		_type	 = TYPE::LAB_WORK_3;
 	}
 
 	void LabWorkManager::drawMenu()

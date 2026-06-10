@@ -9,11 +9,11 @@ namespace M3D_ISICG
 
 	LabWork1::~LabWork1() { 
 		glDeleteShader( _program );
-		glDeleteShader( vao );
 		glUseProgram( 0 );
 		glBindVertexArray( 0 );
-		glDeleteShader( vbo );
-
+		glBindBuffer( GL_ARRAY_BUFFER, 0 );
+		glDeleteBuffers( 1 , &vbo );
+		glDeleteVertexArrays( 1, &vao );
 	}
 
 	bool LabWork1::init()
@@ -96,14 +96,32 @@ namespace M3D_ISICG
 		std::cout << "Compiling Done!" << std::endl;
 
 		// Mesh data
+		
+	#if OPENGL_VERSION_MAJOR == 4 && OPENGL_VERSION_MINOR >= 5
 		glCreateBuffers( 1, &vbo );
 		glNamedBufferData( vbo, mesh.size() * sizeof( Vec2f ), mesh.data(), GL_STATIC_DRAW );
-
 		glCreateVertexArrays( 1, &vao );
 		glEnableVertexArrayAttrib( vao, 0 );
-		glVertexArrayAttribFormat( vao, 0, 2, GL_FLOAT, GL_FALSE , 0 );
+		glVertexArrayAttribFormat( vao, 0, 2, GL_FLOAT, GL_FALSE, 0 );
 		glVertexArrayVertexBuffer( vao, 0, vbo, 0, sizeof( Vec2f ) );
 		glVertexArrayAttribBinding( vao, 0, 0 );
+	#else
+		glGenBuffers( 1, &vbo );
+		glBindBuffer( GL_ARRAY_BUFFER, vbo );
+		glBufferData( GL_ARRAY_BUFFER, mesh.size() * sizeof( Vec2f ), mesh.data(), GL_STATIC_DRAW );
+		glGenVertexArrays( 1, &vao );
+		glBindVertexArray( vao );
+		glEnableVertexAttribArray( 0 );
+		glVertexAttribPointer( 0, // attribute index
+							   2, // vec2 = x, y
+							   GL_FLOAT,
+							   GL_FALSE,
+							   sizeof( Vec2f ), // stride
+							   (void *)0		// offset
+		);
+	#endif
+		
+		
 
 		
 		return true;

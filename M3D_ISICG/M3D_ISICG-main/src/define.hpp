@@ -16,8 +16,8 @@ namespace M3D_ISICG
 
 	// Open GL constants.
 	const int  OPENGL_VERSION_MAJOR = 4;
-	const int  OPENGL_VERSION_MINOR = 5;
-	const char GLSL_VERSION[]		= "#version 450";
+	const int  OPENGL_VERSION_MINOR = 3;
+	const char GLSL_VERSION[]		= "#version 430";
 
 	// Scalars.
 	const float PIf			 = glm::pi<float>();

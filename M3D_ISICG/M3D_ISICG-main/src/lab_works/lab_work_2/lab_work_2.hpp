@@ -38,6 +38,7 @@ namespace M3D_ISICG
 		GLuint			   u_brightness_location;
 		float			   uTranslationX_variable;
 		float			   _time=0;
+		float			   _speed = 1;
 		// ================
 
 		// ================ Settings.

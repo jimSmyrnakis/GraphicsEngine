@@ -1,4 +1,4 @@
-#version 450
+#version 430
 layout( location = 0 ) out vec4 frag_color;
 in vec4 v_color;
 uniform float u_brightness;

@@ -28,6 +28,8 @@ namespace M3D_ISICG
 
 		void print() const;
 
+		std::string getInfo() const;
+
 	  private:
 		void _computeViewMatrix();
 		void _computeProjectionMatrix();

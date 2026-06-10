@@ -2,7 +2,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/string_cast.hpp"
 #include <iostream>
-
+#include <sstream>
 namespace M3D_ISICG
 {
 	Camera::Camera()
@@ -78,12 +78,28 @@ namespace M3D_ISICG
 		std::cout << "========================" << std::endl;
 	}
 
+	std::string Camera::getInfo() const {
+		std::stringstream ss;
+		ss << "======== Camera ========" << std::endl;
+		ss << "Position: " << glm::to_string( _position ) << std::endl;
+		ss << "View direction: " << glm::to_string( -_invDirection ) << std::endl;
+		ss << "Right: " << glm::to_string( _right ) << std::endl;
+		ss << "Up: " << glm::to_string( _up ) << std::endl;
+		ss << "Yaw: " << _yaw << std::endl;
+		ss << "Pitch: " << _pitch << std::endl;
+		ss << "========================" << std::endl;
+
+		return ss.str();
+	}
+
 	void Camera::_computeViewMatrix()
 	{ 
+		_viewMatrix = glm::lookAt( _position, _position - _invDirection, _up );
 	}
 
 	void Camera::_computeProjectionMatrix()
 	{
+		_projectionMatrix = glm::perspective( glm::radians( _fovy ), _aspectRatio, _zNear, _zFar );
 	}
 
 	void Camera::_updateVectors()

@@ -27,9 +27,12 @@ namespace M3D_ISICG
 		void rotate( const float p_yaw, const float p_pitch );
 
 		void print() const;
-
+		void		SetZSpace( const float p_zNear, const float p_zFar );
 		std::string getInfo() const;
+		float &		getZnear( void );
+		float &		getZfar( void );
 
+		Vec3f getPosition( void ) const;
 	  private:
 		void _computeViewMatrix();
 		void _computeProjectionMatrix();

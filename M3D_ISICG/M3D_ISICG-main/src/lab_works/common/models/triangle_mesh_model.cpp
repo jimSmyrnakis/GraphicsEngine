@@ -1,5 +1,8 @@
 #include "triangle_mesh_model.hpp"
 #include "utils/image.hpp"
+#include "glm/gtc/type_ptr.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/integer.hpp>
 #include <iostream>
 
 namespace M3D_ISICG
@@ -261,7 +264,8 @@ namespace M3D_ISICG
 		if ( image.load( fullPath ) )
 		{
 			// Create a texture on the GPU.
-			glCreateTextures( GL_TEXTURE_2D, 1, &texture._id );
+			glGenTextures( 1, &texture._id );
+			glBindTexture( GL_TEXTURE_2D, texture._id );
 			texture._path = path;
 			texture._type = p_type;
 
@@ -290,15 +294,19 @@ namespace M3D_ISICG
 			}
 
 			// Setup the texture format.
-			glTextureStorage2D( texture._id, 1, internalFormat, image._width, image._height );
-			glTextureParameteri( texture._id, GL_TEXTURE_WRAP_S, GL_REPEAT );
-			glTextureParameteri( texture._id, GL_TEXTURE_WRAP_T, GL_REPEAT );
-			glTextureParameteri( texture._id, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-			glTextureParameteri( texture._id, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+			int mipmapLevels = glm::log2( glm::max( image._width, image._height ) );
+			std::cout << "Generating " << mipmapLevels << " mip maps for texture " << texture._path << std::endl;
+			glTexStorage2D(GL_TEXTURE_2D, mipmapLevels, internalFormat, image._width, image._height );
+			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+			
 
 			// Fill the texture.
-			glTextureSubImage2D(
-				texture._id, 0, 0, 0, image._width, image._height, format, GL_UNSIGNED_BYTE, image._pixels );
+			glTexSubImage2D(GL_TEXTURE_2D , 0, 0, 0, image._width, image._height, format, GL_UNSIGNED_BYTE, image._pixels );
+			glGenerateMipmap( GL_TEXTURE_2D );
+			
 		}
 
 		// Save loaded texture.

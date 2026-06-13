@@ -1,11 +1,1 @@
-﻿  lab_work_3.cpp
-C:\Users\User\Desktop\Projects\GraphicsEngine\GraphicsEngine\M3D_ISICG\M3D_ISICG-main\src\lab_works\lab_work_3\lab_work_3.cpp(267,51): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-  Generating code
-  13 of 2041 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    30 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  M3D_ISICG.vcxproj -> C:\Users\User\Desktop\Projects\GraphicsEngine\GraphicsEngine\M3D_ISICG\M3D_ISICG-main\x64\Release\M3D_ISICG.exe
-  0 File(s) copied
-  0 File(s) copied
-  0 File(s) copied
+﻿

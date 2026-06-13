@@ -42,6 +42,16 @@ namespace M3D_ISICG
 		Texture _shininessMap;
 	};
 
+	enum class AttributeIndexConversion
+	{
+		POSITION = 0,
+		NORMAL	 = 1,
+		TEXCOORDS = 2,
+		TANGENT	  = 3,
+		BITANGENT = 4
+
+	};
+
 	class TriangleMesh
 	{
 	  public:

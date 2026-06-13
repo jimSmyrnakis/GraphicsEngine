@@ -1,5 +1,5 @@
-﻿  lab_work_manager.cpp
-  lab_work_1.cpp
-C:\Users\user\Downloads\GraphicsProgramming\M3D_ISICG-main\M3D_ISICG-main\src\lab_works\lab_work_1\lab_work_1.cpp(111,44): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-  Generating Code...
-LINK : fatal error LNK1168: cannot open C:\Users\user\Downloads\GraphicsProgramming\M3D_ISICG-main\M3D_ISICG-main\x64\Debug\M3D_ISICG.exe for writing
+﻿  lab_work_5.cpp
+  M3D_ISICG.vcxproj -> C:\Users\User\Desktop\Projects\GraphicsEngine\GraphicsEngine\M3D_ISICG\M3D_ISICG-main\x64\Debug\M3D_ISICG.exe
+  0 File(s) copied
+  0 File(s) copied
+  0 File(s) copied

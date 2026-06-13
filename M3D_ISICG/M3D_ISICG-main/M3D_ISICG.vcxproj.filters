@@ -103,6 +103,12 @@
     <ClCompile Include="src\lab_works\lab_work_3\lab_work_3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\lab_works\lab_work_4\lab_work_4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lab_works\lab_work_5\lab_work_5.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\application.hpp">
@@ -167,6 +173,8 @@
     </ClInclude>
     <ClInclude Include="src\lab_works\lab_work_2\lab_work_2.hpp" />
     <ClInclude Include="src\lab_works\lab_work_3\lab_work_3.hpp" />
+    <ClInclude Include="src\lab_works\lab_work_4\lab_work_4.hpp" />
+    <ClInclude Include="src\lab_works\lab_work_5\lab_work_5.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\lab_works\lab_work_1\shaders\lw1.frag">
@@ -177,5 +185,7 @@
     </None>
     <None Include="src\lab_works\lab_work_2\shaders\lw1.frag" />
     <None Include="src\lab_works\lab_work_2\shaders\lw1.vert" />
+    <None Include="..\..\..\Lesson1\transfer_12919365_files_740cae3c\Lab4\Lab4\mesh.vert" />
+    <None Include="..\..\..\Lesson1\transfer_12919365_files_740cae3c\Lab4\Lab4\mesh.frag" />
   </ItemGroup>
 </Project>

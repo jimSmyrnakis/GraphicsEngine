@@ -114,4 +114,20 @@ namespace M3D_ISICG
 		_computeViewMatrix();
 	}
 
+	float& Camera::getZnear(void) { return _zNear;
+	}
+	float& Camera::getZfar(void) { return _zFar;
+	}
+
+	void Camera::SetZSpace( const float p_zNear, const float p_zFar )
+	{
+		_zNear = p_zNear;
+		_zFar  = p_zFar;
+		_computeProjectionMatrix();
+	}
+
+	Vec3f Camera::getPosition(void) const { 
+		return this->_position;
+	}
+
 } // namespace M3D_ISICG

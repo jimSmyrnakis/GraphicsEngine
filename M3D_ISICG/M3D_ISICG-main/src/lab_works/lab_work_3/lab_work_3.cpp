@@ -151,6 +151,7 @@ namespace M3D_ISICG
 	LabWork3::~LabWork3()
 	{
 		glDeleteProgram( _program );
+		glDisable( GL_DEPTH_TEST );
 	}
 
 	bool LabWork3::init()
@@ -160,7 +161,7 @@ namespace M3D_ISICG
 		_camera.setPosition( glm::vec3( 0.f, 0.f, 3.f ) );
 		_updateViewMatrix();
 
-		std::cout << "Initializing lab work 2..." << std::endl;
+		std::cout << "Initializing lab work 3..." << std::endl;
 		// Set the color used by glClear to clear the color buffer (in render()).
 		glClearColor( _bgColor.x, _bgColor.y, _bgColor.z, _bgColor.w );
 		
@@ -238,9 +239,22 @@ namespace M3D_ISICG
 		return true;
 	}
 	float rot_angle = 0;
+	float scale_factor = 1;
+	float dir		   = 1.0f; // direction of scaling (1 for up, -1 for down)
 	void LabWork3::animate( const float p_deltaTime )
 	{ 
 		rot_angle += 45 * p_deltaTime; // rotate 45 degrees per second
+		
+		if (dir > 0 &&  scale_factor >= 2.0f )
+		{
+			dir = -1.0f; // reset scale factor to 1 when it reaches 2
+		}
+		else if ( dir < 0 && scale_factor <= 1.0f )
+		{
+			dir = 1.0f; // reset scale factor to 1 when it reaches 2
+		}
+		scale_factor += 0.5f * p_deltaTime * dir; // scale up by 0.5 per second
+
 		_cube.u_model = glm::mat4( 1.0f );
 
 		// Translation
@@ -252,7 +266,7 @@ namespace M3D_ISICG
 		// around x axis
 		_cube.u_model = glm::rotate( _cube.u_model, glm::radians( rot_angle ), glm::vec3( 1.0f, 0.0f, 0.0f ) );
 		// Scaling
-		_cube.u_model = glm::scale( _cube.u_model, glm::vec3( 1.0f, 1.0f, 1.0f ) );
+		_cube.u_model = glm::scale( _cube.u_model, glm::vec3( scale_factor, scale_factor, scale_factor ) );
 		
 	}
 
@@ -333,6 +347,7 @@ namespace M3D_ISICG
 			if ( ImGui::SliderFloat( "FOVY", &_fovy, 1, 120 ) )
 			{
 				_camera.setFovy( _fovy );
+				_updateViewMatrix();
 			}
 		}
 
